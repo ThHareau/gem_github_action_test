@@ -18,6 +18,7 @@ on:
 jobs:
   # This workflow contains a single job called "greet"
   release:
+    if: ${{ github.ref == 'refs/heads/main' }}
     permissions: write-all
     runs-on: ubuntu-latest
 
