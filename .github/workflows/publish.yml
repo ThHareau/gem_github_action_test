@@ -2,10 +2,11 @@ name: Publish
 
 on:
   release:
-    types: [published, edited]
+    types: [published]
 
 jobs:
   release:
+    permissions: write-all
     name: Release
     runs-on: ubuntu-latest
     steps:
