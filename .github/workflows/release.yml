@@ -41,7 +41,9 @@ jobs:
         run: |
           git commit -a -m "Bump version to v`bundle exec rake version`"
           git push
-      - name: Trigger release
+      - name: Build gem
+        run: gem build gem_github_action_test -o gem_github_action_test.gem
+      - name: Create release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "v`bundle exec rake version`" --generate-notes --latest
+        run: gh release create "v`bundle exec rake version`" gem_github_action_test.gem --generate-notes --latest
