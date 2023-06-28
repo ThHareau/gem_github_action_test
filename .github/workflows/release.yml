@@ -18,23 +18,26 @@ on:
 jobs:
   # This workflow contains a single job called "greet"
   release:
-    # The type of runner that the job will run on
+    permissions: write-all
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - uses: actions/checkout@v3
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.1.2
           bundler-cache: true
-      - name: Bumping
+      - name: Configure git and bundle
         run: |
           git config --global user.email "thomas.hareau@noemail.test"
           git config --global user.name "Thomas Hareau"
           bundle config unset deployment
+      - name: Bumping
+        run: |
           bundle exec rake "bump[${{ inputs.type }}]"
           bundle install
+      - name: Commit and push
+        run: |
           git add .
           git commit -m "Bump version to v`bundle exec rake version`"
           git push
