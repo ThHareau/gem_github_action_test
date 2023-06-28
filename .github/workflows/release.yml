@@ -36,7 +36,7 @@ jobs:
           bundle exec rake "bump[${{ inputs.type }}]"
           bundle install
           git add .
-          git commit -m "Bump version to v`bundle exec rake "version`"
+          git commit -m "Bump version to v`bundle exec rake version`"
           git push
       - name: Trigger release
         run: gh release create "v`bundle exec rake "version`" --generate-notes
