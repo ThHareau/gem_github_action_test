@@ -3,6 +3,10 @@
 require 'rake'
 require 'version'
 
+task :version do
+  puts GithubActionGemTest::VERSION
+end
+
 task :bump, [:type] do |_t, args|
   type = args[:type]
   raise 'Must specify type: major, minor, patch' unless %w[major minor patch].include?(type)

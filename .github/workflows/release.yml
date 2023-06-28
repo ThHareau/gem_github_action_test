@@ -1,0 +1,42 @@
+# This is a basic workflow that is manually triggered
+
+name: Create a new release
+
+on:
+  workflow_dispatch:
+    inputs:
+      type:
+        type: choice
+        description: Type of release
+        options:
+          - major
+          - minor
+          - patch
+
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "greet"
+  release:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.1.2
+          bundler-cache: true
+      - name: Bumping
+        run: |
+          git config --global user.email "thomas.hareau@noemail.test"
+          git config --global user.name "Thomas Hareau"
+          bundle config unset deployment
+          bundle exec rake "bump[${{ inputs.type }}]"
+          bundle install
+          git add .
+          git commit -m "Bump version to v`bundle exec rake "version`"
+          git push
+      - name: Trigger release
+        run: gh release create "v`bundle exec rake "version`" --generate-notes
