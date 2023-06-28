@@ -1,0 +1,22 @@
+name: RELEASE
+on:
+  release:
+    types: [published]
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.1.2
+          bundler-cache: true
+      - name: Install dependencies
+        run: bundle install --jobs 4 --retry 3
+      - name: Build gem
+        run: gem build gem_github_action_test -o gem_github_action_test.gem
+      - name: Upload to release
+        run: |
+          gh release upload ${{ github.ref }} gem_github_action_test.gem

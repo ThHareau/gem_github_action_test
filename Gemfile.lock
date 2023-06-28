@@ -1,0 +1,17 @@
+PATH
+  remote: .
+  specs:
+    gem_github_action_test (0.0.1)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+
+PLATFORMS
+  x86_64-linux
+
+DEPENDENCIES
+  gem_github_action_test!
+
+BUNDLED WITH
+   2.4.10
