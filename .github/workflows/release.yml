@@ -33,6 +33,10 @@ jobs:
           git config --global user.email "thomas.hareau@noemail.test"
           git config --global user.name "Thomas Hareau"
           bundle config unset deployment
+          mkdir -p $HOME/.gem
+          touch $HOME/.gem/credentials
+          chmod 0600 $HOME/.gem/credentials
+          printf -- "---\n:rubygems_api_key: ${GEM_HOST_API_KEY}\n" > $HOME/.gem/credentials
       - name: Bumping
         run: |
           bundle exec rake "bump[${{ inputs.type }}]"
@@ -42,8 +46,10 @@ jobs:
           git commit -a -m "Bump version to v`bundle exec rake version`"
           git push
       - name: Build gem
-        run: gem build gem_github_action_test -o gem_github_action_test.gem
+        run: gem build *.gemspec
+      - name: Push gem
+        run: gem push *.gem
       - name: Create release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "v`bundle exec rake version`" gem_github_action_test.gem --generate-notes --latest
+        run: gh release create "v`bundle exec rake version`" *.gem --generate-notes --latest
