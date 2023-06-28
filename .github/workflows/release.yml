@@ -28,7 +28,9 @@ jobs:
         with:
           ruby-version: 3.1.2
           bundler-cache: true
-      - name: Configure git and bundle
+      - name: Configure git, bundle and gem
+        env:
+          GEM_HOST_API_KEY: "${{secrets.GEM_HOST_API_KEY}}"
         run: |
           git config --global user.email "thomas.hareau@noemail.test"
           git config --global user.name "Thomas Hareau"
