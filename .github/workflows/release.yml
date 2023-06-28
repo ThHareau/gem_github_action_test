@@ -38,8 +38,7 @@ jobs:
           bundle install
       - name: Commit and push
         run: |
-          git add .
-          git commit -m "Bump version to v`bundle exec rake version`"
+          git commit -a -m "Bump version to v`bundle exec rake version`"
           git push
       - name: Trigger release
         run: gh release create "v`bundle exec rake "version`" --generate-notes
