@@ -1,7 +1,8 @@
 name: RELEASE
+
 on:
   release:
-    types: [published]
+    types: [published, edited]
 
 jobs:
   release:
@@ -13,10 +14,11 @@ jobs:
         with:
           ruby-version: 3.1.2
           bundler-cache: true
+          ref: ${{ github.event.release.tag_name }}
       - name: Install dependencies
         run: bundle install --jobs 4 --retry 3
       - name: Build gem
         run: gem build gem_github_action_test -o gem_github_action_test.gem
       - name: Upload to release
         run: |
-          gh release upload ${{ github.ref }} gem_github_action_test.gem
+          gh release upload ${{ github.event.release.tag_name }} gem_github_action_test.gem
