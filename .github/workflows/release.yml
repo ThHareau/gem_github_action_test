@@ -47,16 +47,15 @@ jobs:
         run: |
           git commit -a -m "Bump version to v`bundle exec rake version`"
           git push
-      - name: Gem signin
-        env:
-          GEM_OTP_SECRET: "${{secrets.GEM_OTP_SECRET}}"
+      - name: Add OTP generator
         run: |
           gem install rotp
-          gem signin --otp `rotp -s "${GEM_OTP_SECRET}"`
       - name: Build gem
         run: gem build *.gemspec
       - name: Push gem
-        run: gem push *.gem
+        env:
+          GEM_OTP_SECRET: "${{secrets.GEM_OTP_SECRET}}"
+        run: gem push *.gem --otp `rotp -s "${GEM_OTP_SECRET}"`
       - name: Create release
         env:
           GH_TOKEN: ${{ github.token }}
