@@ -9,9 +9,9 @@ on:
         type: choice
         description: Type of release
         options:
-          - major
-          - minor
           - patch
+          - minor
+          - major
 
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -47,6 +47,12 @@ jobs:
         run: |
           git commit -a -m "Bump version to v`bundle exec rake version`"
           git push
+      - name: Gem signin
+        env:
+          GEM_OTP_SECRET: "${{secrets.GEM_OTP_SECRET}}"
+        run: |
+          gem install rotp
+          gem signin --otp `rotp -s "${GEM_HOST_API_KEY}"`
       - name: Build gem
         run: gem build *.gemspec
       - name: Push gem
