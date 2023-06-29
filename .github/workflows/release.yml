@@ -52,7 +52,7 @@ jobs:
           GEM_OTP_SECRET: "${{secrets.GEM_OTP_SECRET}}"
         run: |
           gem install rotp
-          gem signin --otp `rotp -s "${GEM_HOST_API_KEY}"`
+          gem signin --otp `rotp -s "${GEM_OTP_SECRET}"`
       - name: Build gem
         run: gem build *.gemspec
       - name: Push gem
